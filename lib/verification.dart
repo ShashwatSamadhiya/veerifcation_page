@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -67,11 +69,41 @@ class _verificationState extends State<verification> {
     );
   }
 
-  Widget card(BuildContext context) {
+  Widget Card2(BuildContext context, String add, String heading) {
+    return Container(
+        width: 298.8,
+        height: 80,
+        //margin: EdgeInsets.only(top: 335, left: 16, right: 26),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              margin: EdgeInsets.only(left: 18),
+              child: Image.asset("assests/images/${add}.png"),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            Container(
+              child: Text(
+                heading,
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+              ),
+            )
+          ],
+        ));
+  }
+
+  Widget card1(BuildContext context) {
     return Container(
       width: 346,
       height: 88,
-      margin: EdgeInsets.only(top: 335, left: 16, right: 26),
+      // margin: EdgeInsets.only(top: 335, left: 16, right: 26),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -151,6 +183,46 @@ class _verificationState extends State<verification> {
         ],
       ),
     );
+  }
+
+  Widget card(BuildContext context) {
+    return Container(
+        width: 346,
+        height: 88,
+        decoration: BoxDecoration(
+          //color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        margin: EdgeInsets.only(top: 335, left: 16, right: 26),
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            card1(context),
+            const SizedBox(
+              width: 8,
+            ),
+            Card2(context, "privacy", "Private Calling"),
+            SizedBox(
+              width: 8,
+            ),
+            Card2(context, "desktop", "Cross Platform"),
+            SizedBox(
+              width: 8,
+            ),
+            Card2(context, "calling", "Cheap calling rates"),
+            SizedBox(
+              width: 8,
+            ),
+            Card2(context, "Group", "Call recording on all numbers"),
+            SizedBox(
+              width: 8,
+            ),
+            Card2(context, "virtual", "Buy different virtual numbers"),
+            SizedBox(
+              width: 8,
+            ),
+          ],
+        ));
   }
 
   Widget dotindex(BuildContext context) {
@@ -300,23 +372,29 @@ class _verificationState extends State<verification> {
       body: SingleChildScrollView(
           child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment(0.25, 0.25),
+          gradient: RadialGradient(
+              // begin: Alignment.bottomCenter,
+              // end: Alignment(0.25, 0.25),
               // transform: GradientRotation(3.141713913 / 4),
+              center: Alignment(0, 1),
+              //tileMode: TileMode.mirror,
+              radius: 1,
               colors: [
-                Color.fromARGB(255, 24, 46, 116).withOpacity(1),
-                Color.fromARGB(255, 70, 34, 72).withOpacity(1),
+                Color.fromARGB(255, 58, 121, 121).withOpacity(1),
+                Color.fromARGB(255, 54, 55, 97).withOpacity(1),
+                Color.fromARGB(255, 54, 50, 77).withOpacity(1),
                 Colors.black.withOpacity(1)
               ]),
         ),
-        constraints: BoxConstraints(maxHeight: 844, maxWidth: 390),
+        constraints: BoxConstraints(
+          maxHeight: 844,
+          maxWidth: 390,
+        ),
         child: Column(children: [
           Stack(
             children: [
               Elps(context),
               text(context),
-              empty(),
               sec >= 1 ? card(context) : empty(),
               sec >= 1 ? dotindex(context) : empty(),
               sec >= 2 ? Button(context) : empty(),

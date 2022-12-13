@@ -13,7 +13,29 @@ class verification extends StatefulWidget {
 }
 
 class _verificationState extends State<verification> {
+  int sec = 0;
   int i = 0;
+  Timer? countdownTimer;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => startTimer());
+  }
+
+  void startTimer() {
+    countdownTimer =
+        Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  void setCountDown() {
+    setState(() {
+      if (sec == 3) {
+        countdownTimer!.cancel();
+      } else {
+        sec = sec + 1;
+      }
+    });
+  }
 
   Widget Elps(BuildContext context) {
     return Container(
@@ -58,47 +80,42 @@ class _verificationState extends State<verification> {
         children: [
           Container(
               height: 44,
-              //color: Colors.black,
+              color: Colors.white,
               margin: EdgeInsets.only(top: 16, left: 21, right: 93.54),
-              child: Row(children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 18),
-                  child: Image.asset("assests/images/group.png"),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 10, left: 16),
-                  child: Text("You recieved ",
+              // child: Container(
+              //   margin: EdgeInsets.only(bottom: 21),
+              //   child: Image.asset("assests/images/frame.png"),
+              // )
+              child: RichText(
+                text: TextSpan(children: [
+                  WidgetSpan(
+                    child: Image.asset("assests/images/group.png"),
+                  ),
+                  TextSpan(
+                      text: "  You recieved ",
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w400,
                           fontSize: 17,
                           letterSpacing: -0.41)),
-                )
-              ]
-                  // child: RichText(
-                  //   text: TextSpan(children: [
-                  //     WidgetSpan(
-                  //       child: Image.asset("assests/images/group.png"),
-                  //     ),
-                  //     TextSpan(
-                  //         text: "You recieved ",
-                  //         style: TextStyle(
-                  //             color: Colors.black,
-                  //             fontWeight: FontWeight.w400,
-                  //             fontSize: 17,
-                  //             letterSpacing: -0.41)),
-                  //     WidgetSpan(
-                  //         child: GradientText("\$2 Talktime",
-                  //             style: TextStyle(
-                  //                 fontWeight: FontWeight.w700,
-                  //                 fontSize: 17,
-                  //                 letterSpacing: -0.41),
-                  //             colors: [
-                  //           Color(0xffC241FF).withOpacity(1),
-                  //           Color(0xff25C3D8).withOpacity(1),
-                  //         ]))
-                  //   ]),
-                  )),
+                  TextSpan(
+                      text: "\$2 Talktime",
+                      style: new TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w700,
+                          foreground: Paint()
+                            ..shader = LinearGradient(
+                              colors: <Color>[
+                                Color.fromARGB(255, 183, 67, 237)
+                                    .withOpacity(1),
+                                Color(0xff25C3D8).withOpacity(1),
+
+                                //add more color here.
+                              ],
+                            ).createShader(
+                                Rect.fromLTWH(70.0, 70.0, 150.0, 150.0)))),
+                ]),
+              )),
           Container(
               height: 44,
               width: 346,
@@ -108,18 +125,29 @@ class _verificationState extends State<verification> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Container(
-                height: 44,
-                width: 135,
-                margin: EdgeInsets.only(top: 12, left: 21),
-                child: Text(
-                  "See Talktime Plans >",
-                  //textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13,
-                  ),
-                ),
-              ))
+                  height: 44,
+                  width: 135,
+                  margin: EdgeInsets.only(top: 12, left: 21),
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          "See Talktime Plans",
+                          //textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 12),
+                        child: Image.asset("assests/images/vector.png"),
+                      )
+                    ],
+                  )))
         ],
       ),
     );
@@ -263,12 +291,24 @@ class _verificationState extends State<verification> {
         ));
   }
 
+  Widget empty() {
+    return Container();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
           child: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFF1C1C1E),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment(0.25, 0.25),
+              // transform: GradientRotation(3.141713913 / 4),
+              colors: [
+                Color.fromARGB(255, 24, 46, 116).withOpacity(1),
+                Color.fromARGB(255, 70, 34, 72).withOpacity(1),
+                Colors.black.withOpacity(1)
+              ]),
         ),
         constraints: BoxConstraints(maxHeight: 844, maxWidth: 390),
         child: Column(children: [
@@ -276,10 +316,11 @@ class _verificationState extends State<verification> {
             children: [
               Elps(context),
               text(context),
-              card(context),
-              dotindex(context),
-              Button(context),
-              Button2(context)
+              empty(),
+              sec >= 1 ? card(context) : empty(),
+              sec >= 1 ? dotindex(context) : empty(),
+              sec >= 2 ? Button(context) : empty(),
+              sec >= 2 ? Button2(context) : empty(),
             ],
           )
         ]),
